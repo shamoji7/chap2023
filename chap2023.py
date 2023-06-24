@@ -10,7 +10,8 @@ argv = sys.argv
 argc = len(argv)
 
 INDEX = "index"
-index_file = INDEX + "/index3.txt"
+#index_file = INDEX + "/sample_index.txt"
+index_file = INDEX + "/index.txt"
 
 idf_scores = {}
 tfidf_scores = {}
@@ -64,7 +65,7 @@ flat_t = [item for sublist in tokens for item in sublist]
 flat_token = []
 for token in flat_t:
     tmp = token.surface
-    judge = pattern.match(tmp)
+    judge = pattern2.match(tmp)
     flat_token.append(tmp)
     
     if judge:

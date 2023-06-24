@@ -6,8 +6,10 @@ from janome.tokenizer import Tokenizer
 t = Tokenizer()
 
 DATA =  "text"
+#DATA = "sample_text"
 INDEX = "index"
-index_file = INDEX + "/index3.txt"
+index_file = INDEX + "/index.txt"
+#index_file = INDEX + "/sample_index.txt"
 
 index_words = {}
 stopwords = {}
