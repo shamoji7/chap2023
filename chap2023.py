@@ -3,10 +3,13 @@ import math
 import pandas as pd
 import re
 from janome.tokenizer import Tokenizer
+import sys
 
 t = Tokenizer()
+argv = sys.argv
+argc = len(argv)
 
-INDEX = CJE3 + "/index"
+INDEX = "index"
 index_file = INDEX + "/index3.txt"
 
 idf_scores = {}
@@ -42,19 +45,28 @@ for line in f:
 tfidf_table = pd.DataFrame(tfidf_scores)
 tfidf_table = tfidf_table.fillna(0)
 
-query = '吾輩は猫である'
+#argv = '吾輩は猫である'
 query_file = 'query'
 
 pattern = re.compile(r"^[ -ー]$")
 stopwords['という'] = 1
 stopwords['にて'] = 1
 
-tokens = t.tokenize(query)
 
-for token in tokens:
+#tokens = t.tokenize(argv[1])
+tokens = []
+for i in range(argc):
+    if i != 0:
+        list = t.tokenize(argv[i])
+        tokens.append(list)
+flat_t = [item for sublist in tokens for item in sublist]
+
+flat_token = []
+for token in flat_t:
     tmp = token.surface
     judge = pattern.match(tmp)
-
+    flat_token.append(tmp)
+    
     if judge:
         continue
     if tmp in stopwords:
@@ -64,7 +76,6 @@ for token in tokens:
         query_words[tmp] += 1
     else:
         query_words[tmp] = 1
-
 
 
 
@@ -110,4 +121,8 @@ for doc in ranking_docs:
     
     ranking_docs[doc] = cosine
 
-sorted(ranking_docs.items(), key=lambda x:x[1], reverse=True)
+print('コマンドライン引数:', argc)
+print('分ち書き後クエリ:', flat_token)
+print('[docs, cos類似度]')
+for doc in sorted(ranking_docs.items(), key=lambda x:x[1], reverse=True):
+    print(doc)
