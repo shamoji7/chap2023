@@ -1,11 +1,8 @@
 import os
-import math
 
-
-DATA = 'text'
 sizebox = []
-for filename in os.listdir(DATA):
-    f = open(DATA + '/' + filename, 'r')
+for filename in os.listdir('text'):
+    f = open('text/' + filename, 'r')
     size = os.path.getsize(f.name)
     sizebox.append(size)
     print(f.name, size, 'B')
