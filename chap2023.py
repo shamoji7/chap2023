@@ -34,7 +34,6 @@ def cos(argv):
     tfidf_scores = {}
     query_tf = {}
     query_tfidf = {}
-    stopwords = {}
     query_words = {}
     ranking_docs = {}
 
