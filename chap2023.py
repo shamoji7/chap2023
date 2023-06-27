@@ -4,7 +4,6 @@ import re
 from janome.tokenizer import Tokenizer
 from asari.api import Sonar
 import os
-import sys
 from IPython.terminal.prompts import Token
 
 
@@ -16,6 +15,9 @@ input = 'NBA ドラフト'
 argv = input.split()
 argc = len(argv)
 
+
+
+# cos類似度を計算 -----------------------------------
 def cos(argv):
     INDEX = "index"
     #index_file = INDEX + "/sample_index.txt"
@@ -134,15 +136,11 @@ def cos(argv):
         
         ranking_docs[doc] = cosine
 
-    return sorted(ranking_docs.items(), key=lambda x:x[1], reverse=True)
-'''
-        print('コマンドライン引数:', argc)
-        print('分ち書き後クエリ:', flat_token)
-        print('[docs, cos類似度]')
-        for doc in sorted(ranking_docs.items(), key=lambda x:x[1], reverse=True):
-            print(doc)
-'''
+    return ranking_docs.items() #sorted(ranking_docs.items(), key=lambda x:x[1], reverse=True)
 
+
+
+# 文書のポジティブ/ネガティブを変数scaledで-1から1で表示
 def text_emotions():
     data = []
     for filename in os.listdir('text'):
@@ -157,32 +155,69 @@ def text_emotions():
         positive_confidence = next((item['confidence'] for item in classes if item['class_name'] == 'positive'), 0)
         negative_confidence = next((item['confidence'] for item in classes if item['class_name'] == 'negative'), 0)
 
-        scaled_confidence = (positive_confidence - negative_confidence)
-        data.append(scaled_confidence)
+        scaled = (positive_confidence - negative_confidence + 1) / 2
+        data.append(scaled)
     return data
 
 
+# クエリのポジティブ/ネガティブを変数scaledで-1から1で表示
 def query_emotions(argv):
     query = ' '.join(argv)
     res = sonar.ping(text=query)
     classes = res['classes']
     positive_confidence = next((item['confidence'] for item in classes if item['class_name'] == 'positive'), 0)
     negative_confidence = next((item['confidence'] for item in classes if item['class_name'] == 'negative'), 0)
-    scaled = (positive_confidence - negative_confidence)
+    scaled = (positive_confidence - negative_confidence + 1) / 2
     return scaled
 
-cosinfo = cos(argv)
+
+
+# ポジネガの検索式を定義
+# クエリと文書のポジネガが違かったら、距離を調整（0.5倍）
+def dis_emotions(qemo, temo):
+    if qemo >= 0:
+        if temo >= 0:
+            dis = abs(qemo - temo)
+        else:
+            dis = abs(qemo - temo) * 0.5
+    elif qemo < 0:
+        if temo <= 0:
+            dis = abs(qemo - temo)
+        else:
+            dis = abs(qemo - temo) * 0.5
+    return dis
+
+
+
+# 検索スコアのためのアルゴリズムを定義
+# score = cos類似度/2 + ポジネガ指数/2
+# 0 < score < 1 に調整
+def score(cos, emo):
+    return cos + emo
+
+
+
+
+# クエリと文書のポジネガの距離を計算
 te = text_emotions()
 qe = query_emotions(argv)
 
-for row in cosinfo:
-    print('cos similarity:', row)
-for i in range(len(te)):
-    print('text_emotions:', 'doc', i+1, te[i])
-
-print('query_emotions:', qe)
-
-
+emo_dis = []
+counter = 1
+for i in te:
+    tmp = dis_emotions(qe, i)
+    emo_dis.append(['doc{}'.format(counter),tmp])
+    counter += 1
 
 
+# 表示
+score_pair = []
+cosinfo = cos(argv)
+coslist = list(cosinfo)
+for i in range(len(cosinfo)):
+    doc_score = score(coslist[i][1], emo_dis[i][1])
+    score_pair.append(['doc{} '.format(i+1), doc_score])
+
+for i in sorted(score_pair, key=lambda x: x[1], reverse=True):
+    print(i)
 
