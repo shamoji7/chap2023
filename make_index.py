@@ -6,7 +6,7 @@ import stopwords
 
 t = Tokenizer()
 
-index_file = "index/index_s.txt"
+index_file = "index/index.txt"
 
 index_words = {}
 stoplist = []

@@ -180,25 +180,26 @@ def query_emotions(argv):
 # ポジネガの検索式を定義
 # クエリと文書のポジネガが違かったら、距離を調整（0.5倍）
 def dis_emotions(qemo, temo):
-    if qemo >= 0:
-        if temo >= 0:
+    if qemo >= 0.5:
+        if temo >= 0.5:
             dis = abs(qemo - temo)
         else:
             dis = abs(qemo - temo) * 0.5
-    elif qemo < 0:
-        if temo <= 0:
+    elif qemo < 0.5:
+        if temo <= 0.5:
             dis = abs(qemo - temo)
         else:
             dis = abs(qemo - temo) * 0.5
-    return dis
+    scaled = 1 - dis*2
+    return scaled
 
 
 
 # 検索スコアのためのアルゴリズムを定義
-# score = cos類似度/2 + ポジネガ指数/2
+# score = cos類似度*1/3 + ポジネガ指数*1/3
 # 0 < score < 1 に調整
 def score(cos, emo):
-    return cos + emo
+    return cos*(2/3) + emo*(1/3)
 
 
 
@@ -225,4 +226,3 @@ for i in range(len(cosinfo)):
 
 for i in sorted(score_pair, key=lambda x: x[1], reverse=True):
     print(i)
-
