@@ -5,6 +5,7 @@ from janome.tokenizer import Tokenizer
 from asari.api import Sonar
 import os
 from IPython.terminal.prompts import Token
+import stopwords
 
 
 sonar = Sonar()
@@ -15,6 +16,12 @@ input = 'NBA ドラフト'
 argv = input.split()
 argc = len(argv)
 
+# クエリ表示
+print(argv)
+
+
+# ストップワードリストを取得
+stoplist = stopwords.stopwords()
 
 
 # cos類似度を計算 -----------------------------------
@@ -63,8 +70,6 @@ def cos(argv):
     query_file = 'query'
 
     pattern = re.compile(r"^[ -ー]$")
-    stopwords['という'] = 1
-    stopwords['にて'] = 1
 
 
     #tokens = t.tokenize(argv[1])
@@ -82,7 +87,7 @@ def cos(argv):
         
         if judge:
             continue
-        if tmp in stopwords:
+        if tmp in stoplist:
             continue
             
         if tmp in query_words:
