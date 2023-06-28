@@ -15,11 +15,11 @@ import stopwords
 sonar = Sonar()
 t = Tokenizer()
 
-query = '日本 ワールドカップ'
+#query = '日本 W杯'
 #query = 'ナゲッツ ファイナル'
 #query = 'NBA トレード'
 #query = '渡邊雄太 NBA'
-#query = 'ウェンバンヤマ ドラフト'
+query = 'ウェンバンヤマ ドラフト'
 argv = query.split()
 argc = len(argv)
 

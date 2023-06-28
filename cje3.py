@@ -46,11 +46,11 @@ tfidf_table = tfidf_table.fillna(0)
 
 
 # クエリのデータフレームを作成 ----------------------
-query = '日本 ワールドカップ'
+#query = '日本 W杯'
 #query = 'ナゲッツ ファイナル'
 #query = 'NBA トレード'
 #query = '渡邊雄太 NBA'
-#query = 'ウェンバンヤマ ドラフト'
+query = 'ウェンバンヤマ ドラフト'
 query_file = 'query'
 
 argv = query.split()
