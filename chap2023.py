@@ -1,3 +1,5 @@
+# クエリに対して文書のスコアを出すプログラム(0 <= SCORE <= 1)
+
 import math
 import pandas as pd
 import re

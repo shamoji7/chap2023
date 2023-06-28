@@ -1,3 +1,5 @@
+# indexを作成するためのプログラム
+
 import re
 import math
 import os
