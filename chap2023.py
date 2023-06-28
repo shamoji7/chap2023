@@ -25,11 +25,8 @@ argc = len(argv)
 
 # クエリ表示
 print(argv)
-
-
 # ストップワードリストを取得
 stoplist = stopwords.stopwords()
-
 
 # cos類似度を計算 -----------------------------------
 def cos(argv):
