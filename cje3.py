@@ -46,28 +46,40 @@ tfidf_table = tfidf_table.fillna(0)
 
 
 # クエリのデータフレームを作成 ----------------------
-query = '吾輩は猫である'
+query = 'NBA ドラフト'
 query_file = 'query'
+
+argv = query.split()
+argc = len(argv)
+# クエリ表示
+print(argv)
 
 pattern = re.compile(r"^[ -ー]$")
 stopwords['という'] = 1
 stopwords['にて'] = 1
 
-tokens = t.tokenize(query)
+tokens = []
+for i in range(argc):
+    list = t.tokenize(argv[i])
+    tokens.append(list)
+flat_t = [item for sublist in tokens for item in sublist]
 
-for token in tokens:
+flat_token = []
+for token in flat_t:
     tmp = token.surface
     judge = pattern.match(tmp)
-
+    flat_token.append(tmp)
+    
     if judge:
         continue
     if tmp in stopwords:
         continue
-
+        
     if tmp in query_words:
         query_words[tmp] += 1
     else:
         query_words[tmp] = 1
+
 
 for index_word in idf_scores:
     query_tf[index_word] = {}
