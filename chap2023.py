@@ -1,4 +1,6 @@
+# cos類似度と極性分類の確信度から類似文書を表示する。知識情報演習3に独自の工夫を追加。
 # クエリに対して文書のスコアを出すプログラム(0 <= SCORE <= 1)
+
 
 import math
 import pandas as pd
@@ -28,9 +30,7 @@ stoplist = stopwords.stopwords()
 
 # cos類似度を計算 -----------------------------------
 def cos(argv):
-    INDEX = "index"
-    #index_file = INDEX + "/sample_index.txt"
-    index_file = INDEX + "/index.txt"
+    index_file = "index/index.txt"
 
     idf_scores = {}
     tfidf_scores = {}
@@ -146,7 +146,7 @@ def cos(argv):
 
 
 
-# 文書のポジティブ/ネガティブを変数scaledで-1から1で表示
+# 文書のポジティブ/ネガティブを変数scaledで0から1で表示 -------------------------------
 def text_emotions():
     data = []
     for filename in os.listdir('text'):
@@ -166,7 +166,7 @@ def text_emotions():
     return data
 
 
-# クエリのポジティブ/ネガティブを変数scaledで-1から1で表示
+# クエリのポジティブ/ネガティブを変数scaledで-1から1で表示 --------------------------------
 def query_emotions(argv):
     query = ' '.join(argv)
     res = sonar.ping(text=query)
@@ -178,7 +178,7 @@ def query_emotions(argv):
 
 
 
-# ポジネガの検索式を定義
+# ポジネガの検索式を定義 ---------------------------------------
 # クエリと文書のポジネガが違かったら、距離を調整（0.5倍）
 def dis_emotions(qemo, temo):
     if qemo >= 0.5:
@@ -196,8 +196,8 @@ def dis_emotions(qemo, temo):
 
 
 
-# 検索スコアのためのアルゴリズムを定義
-# score = cos類似度*1/3 + ポジネガ指数*1/3
+# 検索スコアのためのアルゴリズムを定義 ----------------
+# score = cos類似度*1/3 + ポジネガ確信度*1/3
 # 0 < score < 1 に調整
 def score(cos, emo):
     return cos*(2/3) + emo*(1/3)
@@ -205,7 +205,7 @@ def score(cos, emo):
 
 
 
-# クエリと文書のポジネガの距離を計算
+# クエリと文書のポジネガの距離を計算 -----------
 te = text_emotions()
 qe = query_emotions(argv)
 
@@ -217,7 +217,7 @@ for i in te:
     counter += 1
 
 
-# 表示
+# 表示 ----------------------------------------
 score_pair = []
 cosinfo = cos(argv)
 coslist = list(cosinfo)
