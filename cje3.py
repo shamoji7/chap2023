@@ -47,10 +47,10 @@ tfidf_table = tfidf_table.fillna(0)
 
 # クエリのデータフレームを作成 ----------------------
 #query = 'モラント 心配'
-query = 'ウォリアーズ 放出'
+#query = 'ウォリアーズ 放出'
 #query = 'プレイオフ ファイナル'
 #query = 'W杯 日本'
-#query = 'オフシーズン ドラフト'
+query = 'オフシーズン ドラフト'
 
 query_file = 'query'
 argv = query.split()
@@ -128,5 +128,8 @@ for doc in ranking_docs:
 
     ranking_docs[doc] = cosine
 
+counter = 0
 for i in sorted(ranking_docs.items(), key=lambda x:x[1], reverse=True):
-    print('cos類似度:',i)
+    if counter < 5:
+        print('cos類似度:',i)
+        counter += 1

@@ -16,10 +16,10 @@ sonar = Sonar()
 t = Tokenizer()
 
 #query = 'モラント 心配'
-query = 'ウォリアーズ 放出'
+#query = 'ウォリアーズ 放出'
 #query = 'プレイオフ ファイナル'
 #query = 'W杯 日本'
-#query = 'オフシーズン ドラフト'
+query = 'オフシーズン ドラフト'
 
 
 argv = query.split()
@@ -144,6 +144,7 @@ def cos(argv):
         
         ranking_docs[doc] = cosine
 
+
     return ranking_docs.items() #sorted(ranking_docs.items(), key=lambda x:x[1], reverse=True)
 
 
@@ -223,9 +224,13 @@ for i in te:
 score_pair = []
 cosinfo = cos(argv)
 coslist = list(cosinfo)
+
 for i in range(len(cosinfo)):
     doc_score = score(coslist[i][1], emo_dis[i][1])
     score_pair.append(['独自スコア: doc{} '.format(i+1), doc_score])
 
+counter = 0
 for i in sorted(score_pair, key=lambda x: x[1], reverse=True):
-    print(i)
+    if counter < 5:
+        print(i)
+        counter += 1
