@@ -15,11 +15,13 @@ import stopwords
 sonar = Sonar()
 t = Tokenizer()
 
-#query = '日本 W杯'
-#query = 'ナゲッツ ファイナル'
-#query = 'NBA トレード'
-#query = '渡邊雄太 NBA'
-query = 'ウェンバンヤマ ドラフト'
+#query = 'モラント 心配'
+#query = 'ウォリアーズ 放出'
+#query = 'プレイオフ ファイナル'
+#query = 'W杯 日本'
+query = 'オフシーズン ドラフト'
+
+
 argv = query.split()
 argc = len(argv)
 
@@ -223,7 +225,7 @@ cosinfo = cos(argv)
 coslist = list(cosinfo)
 for i in range(len(cosinfo)):
     doc_score = score(coslist[i][1], emo_dis[i][1])
-    score_pair.append(['doc{} '.format(i+1), doc_score])
+    score_pair.append(['独自スコア: doc{} '.format(i+1), doc_score])
 
 for i in sorted(score_pair, key=lambda x: x[1], reverse=True):
     print(i)
