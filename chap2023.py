@@ -16,10 +16,10 @@ sonar = Sonar()
 t = Tokenizer()
 
 #query = 'モラント 心配'
-#query = 'ウォリアーズ 放出'
+query = 'ウォリアーズ 放出'
 #query = 'プレイオフ ファイナル'
 #query = 'W杯 日本'
-query = 'オフシーズン ドラフト'
+#query = 'オフシーズン ドラフト'
 
 
 argv = query.split()
