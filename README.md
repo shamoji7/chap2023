@@ -1,2 +1,2 @@
 # chap2023
-This repository is for chap2023's final report.
+This project aims to build a document retrieval system consisting of cosine similarity and polarity classification.
